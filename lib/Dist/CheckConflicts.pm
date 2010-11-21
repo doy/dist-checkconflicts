@@ -7,20 +7,22 @@ use List::MoreUtils 'first_index';
 use Sub::Exporter;
 
 my $import = Sub::Exporter::build_exporter({
-    exports => [ qw(conflicts check_conflicts calculate_conflicts) ],
+    exports => [ qw(conflicts check_conflicts calculate_conflicts dist) ],
     groups => {
-        default => [ qw(conflicts check_conflicts calculate_conflicts) ],
+        default => [ qw(conflicts check_conflicts calculate_conflicts dist) ],
     },
 });
 
 my %CONFLICTS;
+my %DISTS;
 
 sub import {
     my $for = caller;
 
-    my ($conflicts, $alsos);
+    my ($conflicts, $alsos, $dist);
     ($conflicts, @_) = _strip_opt('-conflicts' => @_);
     ($alsos, @_)     = _strip_opt('-also' => @_);
+    ($dist, @_)      = _strip_opt('-dist' => @_);
 
     my %conflicts = %{ $conflicts || {} };
     for my $also (@{ $alsos || [] }) {
@@ -34,6 +36,7 @@ sub import {
     }
 
     $CONFLICTS{$for} = \%conflicts;
+    $DISTS{$for}     = $dist || $for;
 
     goto $import;
 }
@@ -56,12 +59,18 @@ sub conflicts {
     return %{ $CONFLICTS{ $package } };
 }
 
+sub dist {
+    my $package = shift;
+    return $DISTS{ $package };
+}
+
 sub check_conflicts {
     my $package = shift;
+    my $dist = $package->dist;
     my @conflicts = $package->calculate_conflicts;
     return unless @conflicts;
 
-    my $err = "Conflicts detected for $package:\n";
+    my $err = "Conflicts detected for $dist:\n";
     for my $conflict (@conflicts) {
         $err .= "  $conflict->{package} is version "
                 . "$conflict->{installed}, but must be greater than version "
