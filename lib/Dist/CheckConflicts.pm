@@ -203,6 +203,11 @@ sub calculate_conflicts {
     return sort { $a->{package} cmp $b->{package} } @ret;
 }
 
+=head1 TODO
+
+Provide a way to insert a hook into C<@INC> which warns if a conflicting module
+is loaded (would this be reasonable?)
+
 =head1 BUGS
 
 No known bugs.
