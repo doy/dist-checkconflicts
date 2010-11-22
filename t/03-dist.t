@@ -17,6 +17,7 @@ use lib 't/lib/03';
         undef,
         "no conflict error"
     );
+    is(Foo::Conflicts::Good->dist, 'Foo', "correct dist");
 }
 
 {
@@ -34,6 +35,7 @@ use lib 't/lib/03';
         "Conflicts detected for Foo:\n  Foo is version 0.02, but must be greater than version 0.03\n  Foo::Two is version 0.02, but must be greater than version 0.02\n",
         "correct conflict error"
     );
+    is(Foo::Conflicts::Bad->dist, 'Foo', "correct dist");
 }
 
 {
@@ -48,6 +50,7 @@ use lib 't/lib/03';
         undef,
         "no conflict error"
     );
+    is(Bar::Conflicts::Good->dist, 'Bar', "correct dist");
 }
 
 {
@@ -65,6 +68,7 @@ use lib 't/lib/03';
         "Conflicts detected for Bar:\n  Bar is version 0.02, but must be greater than version 0.03\n  Bar::Two is version 0.02, but must be greater than version 0.02\n",
         "correct conflict error"
     );
+    is(Bar::Conflicts::Bad->dist, 'Bar', "correct dist");
 }
 
 done_testing;
