@@ -85,8 +85,12 @@ sub calculate_conflicts {
 
     my @ret;
 
+    CONFLICT:
     for my $conflict (keys %conflicts) {
-        eval "require $conflict; 1" or next;
+        {
+            local $SIG{__WARN__} = sub { };
+            eval "require $conflict; 1" or next CONFLICT;
+        }
         my $installed = $conflict->VERSION;
         push @ret, {
             package   => $conflict,
