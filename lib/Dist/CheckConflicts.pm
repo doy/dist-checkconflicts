@@ -99,6 +99,13 @@ sub import {
     my %conflicts = %{ $conflicts || {} };
     for my $also (@{ $alsos || [] }) {
         eval "require $also; 1;" or next;
+        if (!exists $CONFLICTS{$also}) {
+            $also .= '::Conflicts';
+            eval "require $also; 1;" or next;
+        }
+        if (!exists $CONFLICTS{$also}) {
+            next;
+        }
         my %also_confs = $also->conflicts;
         for my $also_conf (keys %also_confs) {
             $conflicts{$also_conf} = $also_confs{$also_conf}
