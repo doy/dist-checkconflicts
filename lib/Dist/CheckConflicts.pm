@@ -98,7 +98,7 @@ sub import {
 
     my %conflicts = %{ $conflicts || {} };
     for my $also (@{ $alsos || [] }) {
-        eval "require $also; 1;" or die "Couldn't find package $also: $@";
+        eval "require $also; 1;" or next;
         my %also_confs = $also->conflicts;
         for my $also_conf (keys %also_confs) {
             $conflicts{$also_conf} = $also_confs{$also_conf}
