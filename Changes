@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - ignore 'also' packages that aren't found, and also check for a
+        corresponding ::Conflicts package
 
 0.01  2010-11-21
       - Initial release
