@@ -90,6 +90,7 @@ my $import = Sub::Exporter::build_exporter({
 });
 
 my %CONFLICTS;
+my %HAS_CONFLICTS;
 my %DISTS;
 
 sub import {
@@ -120,17 +121,24 @@ sub import {
 
     $CONFLICTS{$for} = \%conflicts;
     $DISTS{$for}     = $dist || $for;
+    for my $conflict (keys %conflicts) {
+        $HAS_CONFLICTS{$conflict} ||= [];
+        push @{ $HAS_CONFLICTS{$conflict} }, $for;
+    }
 
     # warn for already loaded things...
     for my $conflict (keys %conflicts) {
         (my $file = $conflict) =~ s{::}{/}g;
         $file .= '.pm';
         if (exists $INC{$file}) {
-            _check_version($for, $conflict, $conflicts{$conflict});
+            _check_version([$for], $conflict);
         }
     }
 
     # and warn for subsequently loaded things...
+    @INC = grep {
+        !(ref($_) eq 'ARRAY' && @$_ > 1 && $_->[1] == \%CONFLICTS)
+    } @INC;
     unshift @INC, [
         sub {
             my ($sub, $file) = @_;
@@ -139,21 +147,19 @@ sub import {
             $mod =~ s{/}{::}g;
             return unless $mod =~ /[\w:]+/;
 
-            return unless defined $CONFLICTS{$for}
-                       && defined $CONFLICTS{$for}{$mod};
+            return unless defined $HAS_CONFLICTS{$mod};
 
             {
-                local $CONFLICTS{$for}{$mod};
+                local $HAS_CONFLICTS{$mod};
                 require $file;
             }
 
-            _check_version($for, $mod, $conflicts{$mod});
+            _check_version($HAS_CONFLICTS{$mod}, $mod);
 
             my $i = 1;
             return sub { $_ = $i-- }; # the previous require already handled it
         },
         \%CONFLICTS, # arbitrary but unique, see above
-        $for,        # debugging
     ];
 
     goto $import;
@@ -173,18 +179,22 @@ sub _strip_opt {
 }
 
 sub _check_version {
-    my ($for, $mod, $conflict_ver) = @_;
+    my ($fors, $mod) = @_;
 
-    my $version = do {
-        no strict 'refs';
-        ${ ${ $mod . '::' }{VERSION} };
-    };
+    for my $for (@$fors) {
+        my $conflict_ver = $CONFLICTS{$for}{$mod};
+        my $version = do {
+            no strict 'refs';
+            ${ ${ $mod . '::' }{VERSION} };
+        };
 
-    if ($version le $conflict_ver) {
-        warn <<EOF;
+        if ($version le $conflict_ver) {
+            warn <<EOF;
 Conflict detected for $DISTS{$for}:
   $mod is version $version, but must be greater than version $conflict_ver
 EOF
+            return;
+        }
     }
 }
 
