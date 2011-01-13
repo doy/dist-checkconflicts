@@ -117,6 +117,43 @@ sub import {
     $CONFLICTS{$for} = \%conflicts;
     $DISTS{$for}     = $dist || $for;
 
+    # warn for already loaded things...
+    for my $conflict (keys %conflicts) {
+        (my $file = $conflict) =~ s{::}{/}g;
+        $file .= '.pm';
+        if (exists $INC{$file}) {
+            _check_version($for, $conflict, $conflicts{$conflict});
+        }
+    }
+
+    # and warn for subsequently loaded things...
+    unshift @INC, [
+        sub {
+            my ($sub, $file) = @_;
+
+            (my $mod = $file) =~ s{\.pm$}{};
+            $mod =~ s{/}{::}g;
+            return unless $mod =~ /[\w:]+/;
+
+            return unless exists $conflicts{$mod};
+
+            {
+                local @INC = grep {
+                    !(ref($_) eq 'ARRAY' && @$_ > 1 && $_->[1] == \%CONFLICTS)
+                } @INC;
+
+                require $file;
+            }
+
+            _check_version($for, $mod, $conflicts{$mod});
+
+            my $i = 1;
+            return sub { $_ = $i-- }; # the previous require already handled it
+        },
+        \%CONFLICTS, # arbitrary but unique, see above
+        $for,        # debugging
+    ];
+
     goto $import;
 }
 
@@ -131,6 +168,22 @@ sub _strip_opt {
     splice @_, $idx, 2;
 
     return ( $val, @_ );
+}
+
+sub _check_version {
+    my ($for, $mod, $conflict_ver) = @_;
+
+    my $version = do {
+        no strict 'refs';
+        ${ ${ $mod . '::' }{VERSION} };
+    };
+
+    if ($version le $conflict_ver) {
+        warn <<EOF;
+Conflict detected for $DISTS{$for}:
+  $mod is version $version, but must be greater than version $conflict_ver
+EOF
+    }
 }
 
 =method conflicts
