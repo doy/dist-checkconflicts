@@ -78,7 +78,7 @@ the C<Foo> dist which uses Dist::CheckConflicts):
 
 As an added bonus, loading your conflicts module will provide warnings at
 runtime if conflicting modules are detected (regardless of whether they are
-loaded before or afterwards.
+loaded before or afterwards).
 
 =cut
 
