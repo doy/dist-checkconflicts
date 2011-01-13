@@ -21,7 +21,18 @@ use lib 't/lib/03';
 }
 
 {
-    use_ok('Foo::Conflicts::Bad');
+    {
+        my $warnings;
+        local $SIG{__WARN__} = sub { $warnings .= $_[0] };
+        use_ok('Foo::Conflicts::Bad');
+        is($warnings, <<'EOF', "got correct runtime warnings");
+Conflict detected for Foo:
+  Foo::Two is version 0.02, but must be greater than version 0.02
+Conflict detected for Foo:
+  Foo is version 0.02, but must be greater than version 0.03
+EOF
+    }
+
     is_deeply(
         [ Foo::Conflicts::Bad->calculate_conflicts ],
         [
@@ -54,7 +65,20 @@ use lib 't/lib/03';
 }
 
 {
-    use_ok('Bar::Conflicts::Bad');
+    {
+        my $warnings;
+        local $SIG{__WARN__} = sub { $warnings .= $_[0] };
+        use_ok('Bar::Conflicts::Bad');
+        is($warnings, <<'EOF', "got correct runtime warnings");
+Conflict detected for Bar:
+  Bar::Two is version 0.02, but must be greater than version 0.02
+Conflict detected for Bar:
+  Bar::Two is version 0.02, but must be greater than version 0.02
+Conflict detected for Bar:
+  Bar is version 0.02, but must be greater than version 0.03
+EOF
+    }
+
     is_deeply(
         [ Bar::Conflicts::Bad->calculate_conflicts ],
         [
