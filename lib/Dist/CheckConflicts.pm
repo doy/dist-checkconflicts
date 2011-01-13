@@ -76,6 +76,10 @@ the C<Foo> dist which uses Dist::CheckConflicts):
     perl -MFoo::Conflicts -e'print "$_\n"
         for map { $_->{package} } Foo::Conflicts->calculate_conflicts' | cpanm
 
+As an added bonus, loading your conflicts module will provide warnings at
+runtime if conflicting modules are detected (regardless of whether they are
+loaded before or afterwards.
+
 =cut
 
 my $import = Sub::Exporter::build_exporter({
