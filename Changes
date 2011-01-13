@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+
+0.03-TRIAL  2011-01-13
       - add runtime conflict warnings
 
 0.02  2011-01-02
