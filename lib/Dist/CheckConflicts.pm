@@ -273,11 +273,9 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-CheckConflicts>.
 
 =head1 SEE ALSO
 
-=over 4
+L<Module::Install::CheckConflicts>
 
-=item * L<Module::Install::CheckConflicts>
-
-=back
+L<Dist::Zilla::Plugin::Conflicts>
 
 =head1 SUPPORT
 
