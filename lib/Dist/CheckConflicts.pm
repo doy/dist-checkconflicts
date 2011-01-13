@@ -139,13 +139,11 @@ sub import {
             $mod =~ s{/}{::}g;
             return unless $mod =~ /[\w:]+/;
 
-            return unless exists $conflicts{$mod};
+            return unless defined $CONFLICTS{$for}
+                       && defined $CONFLICTS{$for}{$mod};
 
             {
-                local @INC = grep {
-                    !(ref($_) eq 'ARRAY' && @$_ > 1 && $_->[1] == \%CONFLICTS)
-                } @INC;
-
+                local $CONFLICTS{$for}{$mod};
                 require $file;
             }
 
