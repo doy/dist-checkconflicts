@@ -4,35 +4,35 @@ use warnings;
 use Test::More;
 use lib 't/lib/06';
 
-sub warnings_ok {
-    my ($class, $expected) = @_;
+sub use_ok_warnings {
+    my ($class, @conflicts) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $warnings;
-    local $SIG{__WARN__} = sub { $warnings .= $_[0] };
-    use_ok($class);
-    is($warnings, $expected, "correct runtime warnings for $class");
+    @conflicts = sort map { "Conflict detected for $_->[0]:\n  $_->[1] is version $_->[2], but must be greater than version $_->[3]\n" } @conflicts;
+
+    my @warnings;
+    {
+        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+        use_ok($class);
+    }
+    @warnings = sort @warnings;
+
+    is_deeply(\@warnings, \@conflicts, "correct runtime warnings for $class");
 }
 
-warnings_ok('Foo', <<'WARNINGS');
-Conflict detected for Foo::Conflicts:
-  Foo::Foo is version 0.01, but must be greater than version 0.01
-Conflict detected for Foo::Conflicts:
-  Foo::Bar is version 0.01, but must be greater than version 0.01
-WARNINGS
-warnings_ok('Bar', <<'WARNINGS');
-Conflict detected for Bar::Conflicts:
-  Bar::Baz::Bad is version 0.01, but must be greater than version 0.01
-Conflict detected for Bar::Conflicts:
-  Bar::Foo::Bad is version 0.01, but must be greater than version 0.01
-Conflict detected for Bar::Conflicts:
-  Bar::Foo is version 0.01, but must be greater than version 0.01
-Conflict detected for Bar::Conflicts:
-  Bar::Bar::Bad is version 0.01, but must be greater than version 0.01
-Conflict detected for Bar::Conflicts:
-  Bar::Bar is version 0.01, but must be greater than version 0.01
-Conflict detected for Bar::Conflicts:
-  Bar::Quux::Bad is version 0.01, but must be greater than version 0.01
-WARNINGS
+use_ok_warnings(
+    'Foo',
+    ['Foo::Conflicts', 'Foo::Foo', '0.01', '0.01'],
+    ['Foo::Conflicts', 'Foo::Bar', '0.01', '0.01'],
+);
+use_ok_warnings(
+    'Bar',
+    ['Bar::Conflicts', 'Bar::Baz::Bad',  '0.01', '0.01'],
+    ['Bar::Conflicts', 'Bar::Foo::Bad',  '0.01', '0.01'],
+    ['Bar::Conflicts', 'Bar::Foo',       '0.01', '0.01'],
+    ['Bar::Conflicts', 'Bar::Bar::Bad',  '0.01', '0.01'],
+    ['Bar::Conflicts', 'Bar::Bar',       '0.01', '0.01'],
+    ['Bar::Conflicts', 'Bar::Quux::Bad', '0.01', '0.01'],
+);
 
 is(scalar(grep { ref($_) eq 'ARRAY' && @$_ > 1 && ref($_->[1]) eq 'HASH' }
                @INC),
