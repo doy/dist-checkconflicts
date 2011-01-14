@@ -1,6 +1,7 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - fix an issue with certain other perls
 
 0.03-TRIAL  2011-01-13
       - add runtime conflict warnings
