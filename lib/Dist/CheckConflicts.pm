@@ -156,8 +156,14 @@ sub import {
 
             _check_version($HAS_CONFLICTS{$mod}, $mod);
 
-            my $i = 1;
-            return sub { $_ = $i-- if $i }; # the previous require already handled it
+            # the previous require already handled it
+            my $called;
+            return sub {
+                return 0 if $called;
+                $_ = "1;";
+                $called = 1;
+                return 1;
+            };
         },
         \%CONFLICTS, # arbitrary but unique, see above
     ];
