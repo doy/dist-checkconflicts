@@ -1,6 +1,7 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - require 5.8.1, clean up a few things and add a few more tests
 
 0.04-TRIAL  2011-01-13
       - fix an issue with certain other perls
