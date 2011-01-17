@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+
+0.05-TRIAL  2011-01-17
       - require 5.8.1, clean up a few things and add a few more tests
 
 0.04-TRIAL  2011-01-13
