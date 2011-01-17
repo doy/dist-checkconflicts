@@ -34,6 +34,11 @@ use_ok_warnings(
     ['Bar::Conflicts', 'Bar::Quux::Bad', '0.01', '0.01'],
 );
 
+is(Bar::Foo->contents, "__DATA__ for Bar::Foo\n", "__DATA__ sections intact");
+is(Bar::Bar->contents, "__DATA__ for Bar::Bar\n", "__DATA__ sections intact");
+is(Bar::Baz->contents, "__DATA__ for Bar::Baz\n", "__DATA__ sections intact");
+is(Bar::Quux->contents, "__DATA__ for Bar::Quux\n", "__DATA__ sections intact");
+
 is(scalar(grep { ref($_) eq 'ARRAY' && @$_ > 1 && ref($_->[1]) eq 'HASH' }
                @INC),
    1,
