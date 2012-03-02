@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - instead of silently ignoring conflicts that do not compile, issue a
+        conflict warning. (RT#75486, Karen Etheridge)
 
 0.06  2013-06-21
       - make the runtime conflict warnings optional, since i'm not sure how

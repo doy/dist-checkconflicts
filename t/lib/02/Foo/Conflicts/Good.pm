@@ -7,6 +7,7 @@ use Dist::CheckConflicts
         'Foo'        => 0.01,
         'Foo::Two'   => 0.01,
         'Foo::Three' => 0.01,
+        'NotInstalled' => '0.01',
     };
 
 1;
