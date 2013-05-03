@@ -1,9 +1,11 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+
 use Test::More;
 use Test::Fatal;
 use Test::Warn;
+use Test::Warnings;
 use lib 't/lib/02';
 
 {
@@ -88,11 +90,16 @@ use lib 't/lib/02';
         "correct versions for all conflicts",
     );
 
-    is(
-        exception { Foo::Conflicts::Broken->check_conflicts },
-        "Conflicts detected for Foo::Conflicts::Broken:\n  Broken is version unknown, but must be greater than version 0.03\n",
-        "correct conflict error"
-    );
+    warning_like {
+        like(
+            exception { Foo::Conflicts::Broken->check_conflicts },
+            qr/^Conflicts detected for Foo::Conflicts::Broken:\n  Broken is version unknown, but must be greater than version 0.03\n/,
+            "correct conflict error",
+        );
+        }
+        qr/Warning: Broken did not compile/,
+        'Warning is also issued when Broken fails to compile',
+    ;
 }
 
 done_testing;
