@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Dist::CheckConflicts
+    ':runtime',
     -conflicts => {
         'Bar::Foo'        => 0.01,
         'Bar::Foo::Good'  => 0.01,

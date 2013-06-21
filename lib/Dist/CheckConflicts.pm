@@ -120,52 +120,55 @@ sub import {
 
     $CONFLICTS{$for} = \%conflicts;
     $DISTS{$for}     = $dist || $for;
-    for my $conflict (keys %conflicts) {
-        $HAS_CONFLICTS{$conflict} ||= [];
-        push @{ $HAS_CONFLICTS{$conflict} }, $for;
-    }
 
-    # warn for already loaded things...
-    for my $conflict (keys %conflicts) {
-        (my $file = $conflict) =~ s{::}{/}g;
-        $file .= '.pm';
-        if (exists $INC{$file}) {
-            _check_version([$for], $conflict);
+    if (grep { $_ eq ':runtime' } @_) {
+        for my $conflict (keys %conflicts) {
+            $HAS_CONFLICTS{$conflict} ||= [];
+            push @{ $HAS_CONFLICTS{$conflict} }, $for;
         }
-    }
 
-    # and warn for subsequently loaded things...
-    @INC = grep {
-        !(ref($_) eq 'ARRAY' && @$_ > 1 && $_->[1] == \%CONFLICTS)
-    } @INC;
-    unshift @INC, [
-        sub {
-            my ($sub, $file) = @_;
-
-            (my $mod = $file) =~ s{\.pm$}{};
-            $mod =~ s{/}{::}g;
-            return unless $mod =~ /[\w:]+/;
-
-            return unless defined $HAS_CONFLICTS{$mod};
-
-            {
-                local $HAS_CONFLICTS{$mod};
-                require $file;
+        # warn for already loaded things...
+        for my $conflict (keys %conflicts) {
+            (my $file = $conflict) =~ s{::}{/}g;
+            $file .= '.pm';
+            if (exists $INC{$file}) {
+                _check_version([$for], $conflict);
             }
+        }
 
-            _check_version($HAS_CONFLICTS{$mod}, $mod);
+        # and warn for subsequently loaded things...
+        @INC = grep {
+            !(ref($_) eq 'ARRAY' && @$_ > 1 && $_->[1] == \%CONFLICTS)
+        } @INC;
+        unshift @INC, [
+            sub {
+                my ($sub, $file) = @_;
 
-            # the previous require already handled it
-            my $called;
-            return sub {
-                return 0 if $called;
-                $_ = "1;";
-                $called = 1;
-                return 1;
-            };
-        },
-        \%CONFLICTS, # arbitrary but unique, see above
-    ];
+                (my $mod = $file) =~ s{\.pm$}{};
+                $mod =~ s{/}{::}g;
+                return unless $mod =~ /[\w:]+/;
+
+                return unless defined $HAS_CONFLICTS{$mod};
+
+                {
+                    local $HAS_CONFLICTS{$mod};
+                    require $file;
+                }
+
+                _check_version($HAS_CONFLICTS{$mod}, $mod);
+
+                # the previous require already handled it
+                my $called;
+                return sub {
+                    return 0 if $called;
+                    $_ = "1;";
+                    $called = 1;
+                    return 1;
+                };
+            },
+            \%CONFLICTS, # arbitrary but unique, see above
+        ];
+    }
 
     $pkg->export_to_level(1, @_);
 }

@@ -5,21 +5,6 @@ use Test::More;
 use Test::Fatal;
 use lib 't/lib/03';
 
-sub use_ok_warnings {
-    my ($class, @conflicts) = @_;
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-    @conflicts = sort map { "Conflict detected for $_->[0]:\n  $_->[1] is version $_->[2], but must be greater than version $_->[3]\n" } @conflicts;
-
-    my @warnings;
-    {
-        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
-        use_ok($class);
-    }
-    @warnings = sort @warnings;
-
-    is_deeply(\@warnings, \@conflicts, "correct runtime warnings for $class");
-}
-
 {
     use_ok('Foo::Conflicts::Good');
     is_deeply(
@@ -36,11 +21,7 @@ sub use_ok_warnings {
 }
 
 {
-    use_ok_warnings(
-        'Foo::Conflicts::Bad',
-        ['Foo', 'Foo::Two', '0.02', '0.02'],
-        ['Foo', 'Foo',      '0.02', '0.03'],
-    );
+    use_ok('Foo::Conflicts::Bad');
 
     is_deeply(
         [ Foo::Conflicts::Bad->calculate_conflicts ],
@@ -74,12 +55,7 @@ sub use_ok_warnings {
 }
 
 {
-    use_ok_warnings(
-        'Bar::Conflicts::Bad',
-        ['Bar', 'Bar::Two', '0.02', '0.02'],
-        ['Bar', 'Bar::Two', '0.02', '0.02'],
-        ['Bar', 'Bar',      '0.02', '0.03'],
-    );
+    use_ok('Bar::Conflicts::Bad');
 
     is_deeply(
         [ Bar::Conflicts::Bad->calculate_conflicts ],
