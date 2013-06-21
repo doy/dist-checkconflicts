@@ -1,6 +1,7 @@
 package Dist::CheckConflicts;
 use strict;
 use warnings;
+use 5.008001;
 # ABSTRACT: declare version conflicts for your dist
 
 use base 'Exporter';
@@ -9,7 +10,7 @@ our @EXPORT = our @EXPORT_OK = (
 );
 
 use Carp;
-use List::MoreUtils 'first_index';
+use List::MoreUtils 0.12 'first_index';
 
 =head1 SYNOPSIS
 
@@ -303,21 +304,21 @@ You can also look for information at:
 
 =over 4
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item * MetaCPAN
 
-L<http://annocpan.org/dist/Dist-CheckConflicts>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Dist-CheckConflicts>
+L<https://metacpan.org/release/Dist-CheckConflicts>
 
 =item * RT: CPAN's request tracker
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-CheckConflicts>
 
-=item * Search CPAN
+=item * Github
 
-L<http://search.cpan.org/dist/Dist-CheckConflicts>
+L<https://github.com/doy/dist-checkconflicts>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Dist-CheckConflicts>
 
 =back
 
