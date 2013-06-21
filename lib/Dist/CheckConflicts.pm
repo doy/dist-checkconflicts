@@ -3,9 +3,13 @@ use strict;
 use warnings;
 # ABSTRACT: declare version conflicts for your dist
 
+use Exporter 'import';
+our @EXPORT = our @EXPORT_OK = (
+    qw(conflicts check_conflicts calculate_conflicts dist)
+);
+
 use Carp;
 use List::MoreUtils 'first_index';
-use Sub::Exporter;
 
 =head1 SYNOPSIS
 
@@ -81,13 +85,6 @@ runtime if conflicting modules are detected (regardless of whether they are
 loaded before or afterwards).
 
 =cut
-
-my $import = Sub::Exporter::build_exporter({
-    exports => [ qw(conflicts check_conflicts calculate_conflicts dist) ],
-    groups => {
-        default => [ qw(conflicts check_conflicts calculate_conflicts dist) ],
-    },
-});
 
 my %CONFLICTS;
 my %HAS_CONFLICTS;
