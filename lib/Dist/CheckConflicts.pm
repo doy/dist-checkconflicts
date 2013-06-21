@@ -3,7 +3,7 @@ use strict;
 use warnings;
 # ABSTRACT: declare version conflicts for your dist
 
-use Exporter 'import';
+use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = (
     qw(conflicts check_conflicts calculate_conflicts dist)
 );
@@ -91,6 +91,7 @@ my %HAS_CONFLICTS;
 my %DISTS;
 
 sub import {
+    my $pkg = shift;
     my $for = caller;
 
     my ($conflicts, $alsos, $dist);
@@ -165,7 +166,7 @@ sub import {
         \%CONFLICTS, # arbitrary but unique, see above
     ];
 
-    goto $import;
+    $pkg->export_to_level(1, @_);
 }
 
 sub _strip_opt {
