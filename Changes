@@ -1,6 +1,9 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - make the runtime conflict warnings optional, since i'm not sure how
+        stable of an idea this really is
+      - use Exporter instead of Sub::Exporter
 
 0.05-TRIAL  2011-01-17
       - require 5.8.1, clean up a few things and add a few more tests
