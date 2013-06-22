@@ -4,7 +4,7 @@ use warnings;
 
 use Test::More;
 use Test::Fatal;
-use Test::Warnings 'warning';
+use Test::Warnings 0.005 'warning';
 use lib 't/lib/02';
 
 {
