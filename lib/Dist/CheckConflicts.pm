@@ -130,8 +130,6 @@ sub import {
 
         # warn for already loaded things...
         for my $conflict (keys %conflicts) {
-            (my $file = $conflict) =~ s{::}{/}g;
-            $file .= '.pm';
             if (exists $INC{module_notional_filename($conflict)}) {
                 _check_version([$for], $conflict);
             }
