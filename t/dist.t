@@ -1,11 +1,9 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-
 use Test::More;
 use Test::Fatal;
-use Test::Warnings 0.005 'warning';
-use lib 't/lib/02';
+use lib 't/lib/dist';
 
 {
     use_ok('Foo::Conflicts::Good');
@@ -19,6 +17,7 @@ use lib 't/lib/02';
         undef,
         "no conflict error"
     );
+    is(Foo::Conflicts::Good->dist, 'Foo', "correct dist");
 }
 
 {
@@ -34,9 +33,10 @@ use lib 't/lib/02';
     );
     is(
         exception { Foo::Conflicts::Bad->check_conflicts },
-        "Conflicts detected for Foo::Conflicts::Bad:\n  Foo is version 0.02, but must be greater than version 0.03\n  Foo::Two is version 0.02, but must be greater than version 0.02\n",
+        "Conflicts detected for Foo:\n  Foo is version 0.02, but must be greater than version 0.03\n  Foo::Two is version 0.02, but must be greater than version 0.02\n",
         "correct conflict error"
     );
+    is(Foo::Conflicts::Bad->dist, 'Foo', "correct dist");
 }
 
 {
@@ -51,6 +51,7 @@ use lib 't/lib/02';
         undef,
         "no conflict error"
     );
+    is(Bar::Conflicts::Good->dist, 'Bar', "correct dist");
 }
 
 {
@@ -66,39 +67,10 @@ use lib 't/lib/02';
     );
     is(
         exception { Bar::Conflicts::Bad->check_conflicts },
-        "Conflicts detected for Bar::Conflicts::Bad:\n  Bar is version 0.02, but must be greater than version 0.03\n  Bar::Two is version 0.02, but must be greater than version 0.02\n",
+        "Conflicts detected for Bar:\n  Bar is version 0.02, but must be greater than version 0.03\n  Bar::Two is version 0.02, but must be greater than version 0.02\n",
         "correct conflict error"
     );
-}
-
-{
-    # conflicting module is utterly broken
-
-    use_ok('Foo::Conflicts::Broken');
-
-    my @conflicts;
-    like warning { @conflicts = Foo::Conflicts::Broken->calculate_conflicts },
-        qr/Warning: Broken did not compile/,
-        'Warning is issued when Broken fails to compile';
-
-    is_deeply(
-        \@conflicts,
-        [
-            { package => 'Broken', installed => 'unknown', required => '0.03' },
-        ],
-        "correct versions for all conflicts",
-    );
-
-    like warning {
-        like(
-            exception { Foo::Conflicts::Broken->check_conflicts },
-            qr/^Conflicts detected for Foo::Conflicts::Broken:\n  Broken is version unknown, but must be greater than version 0.03\n/,
-            "correct conflict error",
-        );
-        },
-        qr/Warning: Broken did not compile/,
-        'Warning is also issued when Broken fails to compile',
-    ;
+    is(Bar::Conflicts::Bad->dist, 'Bar', "correct dist");
 }
 
 done_testing;

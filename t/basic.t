@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More;
-use lib 't/lib/01';
+use lib 't/lib/basic';
 
 {
     use_ok('Foo::Conflicts');

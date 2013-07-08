@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More;
-use lib 't/lib/04';
+use lib 't/lib/merge';
 
 {
     use_ok('Foo::Conflicts');

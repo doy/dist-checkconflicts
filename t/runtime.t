@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More;
-use lib 't/lib/06';
+use lib 't/lib/runtime';
 
 sub use_ok_warnings {
     my ($class, @conflicts) = @_;

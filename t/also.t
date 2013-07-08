@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Fatal;
-use lib 't/lib/05';
+use lib 't/lib/also';
 
 {
     use_ok('Bar::Conflicts');
