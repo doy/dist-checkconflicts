@@ -268,7 +268,10 @@ sub calculate_conflicts {
 
     CONFLICT:
     for my $conflict (keys %conflicts) {
-        my $success = eval { require_module($conflict) };
+        my $success = do {
+            local $SIG{__WARN__} = sub {};
+            eval { require_module($conflict) };
+        };
         my $error = $@;
         my $file = module_notional_filename($conflict);
         next if not $success and $error =~ /Can't locate \Q$file\E in \@INC/;
