@@ -313,13 +313,13 @@ You can also look for information at:
 
 L<https://metacpan.org/release/Dist-CheckConflicts>
 
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-CheckConflicts>
-
 =item * Github
 
 L<https://github.com/doy/dist-checkconflicts>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-CheckConflicts>
 
 =item * CPAN Ratings
 
