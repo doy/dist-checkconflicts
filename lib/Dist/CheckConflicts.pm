@@ -103,10 +103,10 @@ sub import {
 
     my %conflicts = %{ $conflicts || {} };
     for my $also (@{ $alsos || [] }) {
-        eval "require $also; 1;" or next;
+        eval { require_module($also) } or next;
         if (!exists $CONFLICTS{$also}) {
             $also .= '::Conflicts';
-            eval "require $also; 1;" or next;
+            eval { require_module($also) } or next;
         }
         if (!exists $CONFLICTS{$also}) {
             next;
