@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+
+0.08  2013-07-09
       - remove Test::Warnings dep
 
 0.07  2013-07-08
