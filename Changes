@@ -1,6 +1,7 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - remove Test::Warnings dep
 
 0.07  2013-07-08
       - instead of silently ignoring conflicts that do not compile, issue a
