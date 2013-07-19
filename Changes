@@ -1,6 +1,7 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - support Perl 5.6.x (Toby Inkster)
 
 0.08  2013-07-09
       - remove Test::Warnings dep

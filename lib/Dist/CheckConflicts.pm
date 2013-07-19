@@ -1,7 +1,7 @@
 package Dist::CheckConflicts;
 use strict;
 use warnings;
-use 5.008001;
+use 5.006;
 # ABSTRACT: declare version conflicts for your dist
 
 use base 'Exporter';
@@ -173,16 +173,16 @@ sub import {
 }
 
 sub _strip_opt {
-    my $opt = shift;
-    my $idx = first_index { ( $_ || '' ) eq $opt } @_;
+    my ($opt, @args) = @_;
+    my $idx = first_index { ( $_ || '' ) eq $opt } @args;
 
-    return ( undef, @_ ) unless $idx >= 0 && $#_ >= $idx + 1;
+    return ( undef, @args ) unless $idx >= 0 && $#args >= $idx + 1;
 
-    my $val = $_[ $idx + 1 ];
+    my $val = $args[ $idx + 1 ];
 
-    splice @_, $idx, 2;
+    splice @args, $idx, 2;
 
-    return ( $val, @_ );
+    return ( $val, @args );
 }
 
 sub _check_version {
