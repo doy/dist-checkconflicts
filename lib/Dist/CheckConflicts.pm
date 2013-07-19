@@ -292,9 +292,8 @@ sub calculate_conflicts {
 
 No known bugs.
 
-Please report any bugs through RT: email
-C<bug-dist-checkconflicts at rt.cpan.org>, or browse to
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-CheckConflicts>.
+Please report any bugs to GitHub Issues at
+L<https://github.com/doy/dist-checkconflicts/issues>.
 
 =head1 SEE ALSO
 
