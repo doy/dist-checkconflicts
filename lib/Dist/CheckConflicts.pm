@@ -11,7 +11,7 @@ our @EXPORT = our @EXPORT_OK = (
 
 use Carp;
 use List::MoreUtils 0.12 'first_index';
-use Module::Runtime 'module_notional_filename', 'require_module';
+use Module::Runtime 0.009 'module_notional_filename', 'require_module';
 
 =head1 SYNOPSIS
 
