@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+
+0.10  2013-12-17
       - we need Module::Runtime 0.009 for module_notional_filename (nnutter,
         #6)
 
