@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - we need Module::Runtime 0.009 for module_notional_filename (nnutter,
+        #6)
 
 0.09  2013-07-19
       - support Perl 5.6.x (Toby Inkster)
