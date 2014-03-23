@@ -10,7 +10,6 @@ our @EXPORT = our @EXPORT_OK = (
 );
 
 use Carp;
-use List::MoreUtils 0.12 'first_index';
 use Module::Runtime 0.009 'module_notional_filename', 'require_module';
 
 =head1 SYNOPSIS
@@ -174,13 +173,14 @@ sub import {
 
 sub _strip_opt {
     my ($opt, @args) = @_;
-    my $idx = first_index { ( $_ || '' ) eq $opt } @args;
 
-    return ( undef, @args ) unless $idx >= 0 && $#args >= $idx + 1;
-
-    my $val = $args[ $idx + 1 ];
-
-    splice @args, $idx, 2;
+    my $val;
+    for my $idx ( 0 .. $#args - 1 ) {
+        if (defined $args[$idx] && $args[$idx] eq $opt) {
+            $val = (splice @args, $idx, 2)[1];
+            last;
+        }
+    }
 
     return ( $val, @args );
 }
