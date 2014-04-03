@@ -1,6 +1,8 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+
+0.11  2014-04-03
       - drop the dep on List::MoreUtils (haarg, #8)
 
 0.10  2013-12-17
