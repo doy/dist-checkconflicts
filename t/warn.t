@@ -5,7 +5,7 @@ use Test::More;
 use lib 't/lib/warn';
 
 {
-    use_ok("Foo::Conflicts");
+    require Foo::Conflicts;
 
     my $warning = '';
     local $SIG{__WARN__} = sub { $warning .= $_[0] };

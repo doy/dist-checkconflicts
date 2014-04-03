@@ -4,7 +4,9 @@ use warnings;
 use Test::More;
 use lib 't/lib/runtime';
 
-sub use_ok_warnings {
+use Module::Runtime 'require_module';
+
+sub warnings_ok {
     my ($class, @conflicts) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     @conflicts = sort map { "Conflict detected for $_->[0]:\n  $_->[1] is version $_->[2], but must be greater than version $_->[3]\n" } @conflicts;
@@ -12,19 +14,19 @@ sub use_ok_warnings {
     my @warnings;
     {
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
-        use_ok($class);
+        require_module($class);
     }
     @warnings = sort @warnings;
 
     is_deeply(\@warnings, \@conflicts, "correct runtime warnings for $class");
 }
 
-use_ok_warnings(
+warnings_ok(
     'Foo',
     ['Foo::Conflicts', 'Foo::Foo', '0.01', '0.01'],
     ['Foo::Conflicts', 'Foo::Bar', '0.01', '0.01'],
 );
-use_ok_warnings(
+warnings_ok(
     'Bar',
     ['Bar::Conflicts', 'Bar::Baz::Bad',  '0.01', '0.01'],
     ['Bar::Conflicts', 'Bar::Foo::Bad',  '0.01', '0.01'],

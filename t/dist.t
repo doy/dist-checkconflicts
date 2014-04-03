@@ -6,7 +6,7 @@ use Test::Fatal;
 use lib 't/lib/dist';
 
 {
-    use_ok('Foo::Conflicts::Good');
+    require Foo::Conflicts::Good;
     is_deeply(
         [ Foo::Conflicts::Good->calculate_conflicts ],
         [],
@@ -21,7 +21,7 @@ use lib 't/lib/dist';
 }
 
 {
-    use_ok('Foo::Conflicts::Bad');
+    require Foo::Conflicts::Bad;
 
     is_deeply(
         [ Foo::Conflicts::Bad->calculate_conflicts ],
@@ -40,7 +40,7 @@ use lib 't/lib/dist';
 }
 
 {
-    use_ok('Bar::Conflicts::Good');
+    require Bar::Conflicts::Good;
     is_deeply(
         [ Bar::Conflicts::Good->calculate_conflicts ],
         [],
@@ -55,7 +55,7 @@ use lib 't/lib/dist';
 }
 
 {
-    use_ok('Bar::Conflicts::Bad');
+    require Bar::Conflicts::Bad;
 
     is_deeply(
         [ Bar::Conflicts::Bad->calculate_conflicts ],

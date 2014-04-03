@@ -6,7 +6,7 @@ use Test::Fatal;
 use lib 't/lib/also';
 
 {
-    use_ok('Bar::Conflicts');
+    require Bar::Conflicts;
     is_deeply(
         { Bar::Conflicts->conflicts },
         {
@@ -19,7 +19,7 @@ use lib 't/lib/also';
 }
 
 {
-    use_ok('Bar::Conflicts2');
+    require Bar::Conflicts2;
     is_deeply(
         { Bar::Conflicts2->conflicts },
         {

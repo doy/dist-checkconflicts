@@ -5,7 +5,7 @@ use Test::More;
 use lib 't/lib/merge';
 
 {
-    use_ok('Foo::Conflicts');
+    require Foo::Conflicts;
     is_deeply(
         { Foo::Conflicts->conflicts },
         {

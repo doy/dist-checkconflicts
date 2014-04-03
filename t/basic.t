@@ -5,7 +5,7 @@ use Test::More;
 use lib 't/lib/basic';
 
 {
-    use_ok('Foo::Conflicts');
+    require Foo::Conflicts;
     is_deeply(
         { Foo::Conflicts->conflicts },
         {
@@ -17,7 +17,7 @@ use lib 't/lib/basic';
 }
 
 {
-    use_ok('Bar::Conflicts');
+    require Bar::Conflicts;
     is_deeply(
         { Bar::Conflicts->conflicts },
         {
