@@ -1,6 +1,7 @@
 Revision history for Dist-CheckConflicts
 
 {{$NEXT}}
+      - drop the dep on List::MoreUtils (haarg, #8)
 
 0.10  2013-12-17
       - we need Module::Runtime 0.009 for module_notional_filename (nnutter,
